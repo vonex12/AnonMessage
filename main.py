@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Токен бота (из переменных окружения на Render)
-API_TOKEN = os.getenv("BOT_TOKEN")
+API_TOKEN = os.getenv("8066163997:AAEDYXXY9L3o3Xn3tgvgjEwpgsz8lkLT1bo")
 
 # Инициализация бота и диспетчера
 bot = Bot(token=API_TOKEN, parse_mode=ParseMode.HTML)
