@@ -1,3 +1,4 @@
+import os
 import asyncio
 import secrets
 import logging
@@ -5,20 +6,17 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.enums import ParseMode
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.client.default import DefaultBotProperties
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 # Логирование
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Токен бота
-API_TOKEN = os.getenv("8066163997:AAEDYXXY9L3o3Xn3tgvgjEwpgsz8lkLT1bo")
+# Токен бота (из переменных окружения на Render)
+API_TOKEN = os.getenv("BOT_TOKEN")
 
-bot = Bot(
-    token=API_TOKEN,
-    default=DefaultBotProperties(parse_mode=ParseMode.HTML)
-)
+# Инициализация бота и диспетчера
+bot = Bot(token=API_TOKEN, parse_mode=ParseMode.HTML)
 dp = Dispatcher(storage=MemoryStorage())
 
 # Словари
@@ -120,22 +118,16 @@ async def handle_message(message: types.Message):
 
         try:
             if message.photo:
-                logger.info("Отправляется: фото")
                 await bot.send_photo(target_id, message.photo[-1].file_id, caption="📥 Ответ с изображением")
             elif message.sticker:
-                logger.info("Отправляется: стикер")
                 await bot.send_sticker(target_id, message.sticker.file_id)
             elif message.animation:
-                logger.info("Отправляется: GIF")
                 await bot.send_animation(target_id, message.animation.file_id, caption="📥 Ответ с GIF")
             elif message.video_note:
-                logger.info("Отправляется: видеосообщение")
                 await bot.send_video_note(target_id, message.video_note.file_id)
             elif message.video:
-                logger.info("Отправляется: видео")
                 await bot.send_video(target_id, message.video.file_id, caption="📥 Ответ с видео")
             else:
-                logger.info("Отправляется: текст")
                 await bot.send_message(target_id, f"📥 Ответ:\n\n{message.text}")
 
             await message.answer("Ответ отправлен.")
@@ -157,22 +149,16 @@ async def handle_message(message: types.Message):
 
         try:
             if message.photo:
-                logger.info("Пересылается: фото")
                 await bot.send_photo(target_id, message.photo[-1].file_id, caption="📩 Изображение", reply_markup=kb)
             elif message.sticker:
-                logger.info("Пересылается: стикер")
                 await bot.send_sticker(target_id, message.sticker.file_id, reply_markup=kb)
             elif message.animation:
-                logger.info("Пересылается: GIF")
                 await bot.send_animation(target_id, message.animation.file_id, caption="📩 GIF", reply_markup=kb)
             elif message.video_note:
-                logger.info("Пересылается: видеосообщение")
                 await bot.send_video_note(target_id, message.video_note.file_id, reply_markup=kb)
             elif message.video:
-                logger.info("Пересылается: видео")
                 await bot.send_video(target_id, message.video.file_id, caption="📩 Видео", reply_markup=kb)
             else:
-                logger.info("Пересылается: текст")
                 await bot.send_message(target_id, f"<b>Сообщение:</b>\n\n{message.text}", reply_markup=kb)
 
             active_replies[target_id] = sender_id
