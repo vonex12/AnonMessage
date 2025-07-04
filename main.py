@@ -12,8 +12,10 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Токен бота (из переменных окружения на Render)
-API_TOKEN = os.getenv("8066163997:AAEDYXXY9L3o3Xn3tgvgjEwpgsz8lkLT1bo")
+# Получение токена из переменной окружения
+API_TOKEN = os.getenv("BOT_TOKEN")
+if not API_TOKEN:
+    raise ValueError("❌ BOT_TOKEN переменная окружения не установлена!")
 
 # Инициализация бота и диспетчера
 bot = Bot(token=API_TOKEN, parse_mode=ParseMode.HTML)
@@ -129,7 +131,6 @@ async def handle_message(message: types.Message):
                 await bot.send_video(target_id, message.video.file_id, caption="📥 Ответ с видео")
             else:
                 await bot.send_message(target_id, f"📥 Ответ:\n\n{message.text}")
-
             await message.answer("Ответ отправлен.")
         except Exception as e:
             logger.error(f"Ошибка при отправке ответа: {e}")
